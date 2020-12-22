@@ -31,6 +31,8 @@ else
 		# Install database
 		mkdir -p "$DBDIR" && \
 		curl "${BOOTSTRAPLOCATIONS[$index]}" | tar -xzC "$DBDIR"
+
+    echo "Bootstrap downloaded and extracted"
 	else
 		echo "None bootstrap was found, will download blockchain from node peers"
 	fi

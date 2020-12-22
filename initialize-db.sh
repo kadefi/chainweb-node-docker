@@ -4,7 +4,7 @@ DBDIR="/data/chainweb-db/0"
 # Double check if dbdir already exists, only download bootstrap if it doesn't
 if [ -d $DBDIR ] 
 then
-	echo "Directory $DBDIR already exists, we will not download any bootstrap, if you want to delete the bootstrap you need to delete the folder first" 
+	echo "Directory $DBDIR already exists, we will not download any bootstrap, if you want to download the bootstrap you need to delete the folder first" 
 else
 	echo "$DBDIR does not exists, lets download the bootstrap"
 	# Getting Kadena bootstrap from Zel Servers

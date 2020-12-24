@@ -7,7 +7,7 @@
 FROM ubuntu:18.04
 
 # install prerequisites
-RUN apt-get update && apt-get install -y librocksdb-dev curl xxd openssl
+RUN apt-get update && apt-get install -y librocksdb-dev curl xxd openssl jq
 
 # Install chainweb applications
 WORKDIR /chainweb

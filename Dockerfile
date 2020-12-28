@@ -25,6 +25,6 @@ RUN mkdir -p /root/.local/share/chainweb-node/mainnet01/
 
 STOPSIGNAL SIGTERM
 EXPOSE 443
-HEALTHCHECK --start-period=5m --interval=1m --retries=5 --timeout=10s CMD ./check-health.sh
+HEALTHCHECK --start-period=10m --interval=1m --retries=5 --timeout=10s CMD ./check-health.sh
 
 CMD ./run-chainweb-node.sh

@@ -1,5 +1,47 @@
 #!/usr/bin/env bash
 
+# Retries a command a configurable number of times with backoff.
+#
+# The retry count is given by ATTEMPTS (default 5), the initial backoff
+# timeout is given by TIMEOUT in seconds (default 1.)
+#
+# Successive backoffs double the timeout.
+function with_backoff {
+  local max_attempts=${ATTEMPTS-5}
+  local timeout=${TIMEOUT-1}
+  local attempt=1
+  local exitCode=0
+
+  while (( $attempt < $max_attempts ))
+  do
+    if "$@"
+    then
+      echo "Bootstrap downloaded creating $DBDIR"
+      mkdir -p "$DBDIR"
+      echo "Extracting bootstrap to $DBDIR"
+      tar -xvf bootstrap.tar.gz -C "$DBDIR"
+      rm bootstrap.tar.gz
+      echo "Bootstrap extract finish"
+      return 0
+    else
+      exitCode=$?
+    fi
+
+    echo "Failure! Retrying in $timeout.." 1>&2
+    sleep $timeout
+    attempt=$(( attempt + 1 ))
+    timeout=$(( timeout * 2 ))
+  done
+
+  if [[ $exitCode != 0 ]]
+  then
+    rm -rf /data/chainweb-db/
+    echo "Failed for the last time! ($@)" 1>&2
+  fi
+
+  return $exitCode
+}
+
 DBDIR="/data/chainweb-db/0"
 # Double check if dbdir already exists, only download bootstrap if it doesn't
 if [ -d $DBDIR ] 
@@ -27,12 +69,11 @@ else
 	if [ $httpstatus == "200" ] 
 	then
 		echo "Bootstrap location valid"
-		echo "Downloading bootstrap and extract it to $DBDIR"
+		echo "Downloading bootstrap"
 		# Install database
-		mkdir -p "$DBDIR" && \
-		curl "${BOOTSTRAPLOCATIONS[$index]}" | tar -xzC "$DBDIR"
-
-    echo "Bootstrap downloaded and extracted"
+		with_backoff curl --keepalive-time 30 \
+		-C - \
+		-o bootstrap.tar.gz "${BOOTSTRAPLOCATIONS[$index]}"
 	else
 		echo "None bootstrap was found, will download blockchain from node peers"
 	fi

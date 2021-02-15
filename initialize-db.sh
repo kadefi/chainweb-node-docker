@@ -74,22 +74,21 @@ else
 
   retry=0
   file_lenght=0
-  while [[ "$file_lenght" -lt "10000000000" ]]; do
+  while [[ "$file_lenght" -lt "10000000000" && "$retry" -lt 4 ]]; do
     index=$(shuf -i 0-24 -n 1)
     echo "Testing bootstrap location ${BOOTSTRAPLOCATIONS[$index]}"
-    file_lenght=$(curl -sI  -m 5 ${BOOTSTRAPLOCATIONS[$index]} | grep -i Content-Length | awk '{print $2}' | sed 's/[^0-9]*//g')
+    file_lenght=$(curl -sI  -m 5 ${BOOTSTRAPLOCATIONS[$index]} | grep 'Content-Length' | sed 's/[^0-9]*//g')
 
-   if [[ $file_lenght -gt "10000000000" ]]; then
-    echo "File lenght: $file_lenght"
-   else
-    echo "File not exist! Source skipped..."
-   fi
-   
+if [[ "$file_lenght" -gt "10000000000" ]]; then
+echo "File lenght: $file_lenght"
+else
+echo "File not exist! Source skipped..."
+fi
   retry=$(expr $retry + 1)
  done
 
 
-  if [[ ${file_lenght} -gt 10000000000 ]]; then
+  if [[ "$file_lenght" -gt 10000000000 ]]; then
     echo "Bootstrap location valid"
     echo "Downloading bootstrap"
     # Install database
@@ -100,3 +99,4 @@ else
     echo "None bootstrap was found, will download blockchain from node peers"
   fi
 fi
+

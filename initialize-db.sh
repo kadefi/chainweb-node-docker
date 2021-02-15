@@ -72,17 +72,24 @@ else
   BOOTSTRAPLOCATIONS[23]="http://207.180.240.218:16127/zelapps/zelshare/getfile/db-chainweb-node-ubuntu.18.04-latest.tar.gz?token=e12c9a4eb93d489b7e431fc0ca71696aa01af6cacea0a7d5184df695ceb4ba6c"
   BOOTSTRAPLOCATIONS[24]="http://193.188.15.153:16127/zelapps/zelshare/getfile/db-chainweb-node-ubuntu.18.04-latest.tar.gz?token=18c77c36d1db8d7b81a5a9066d9cacd465b906c41fd763a4490b3c5e1edc2ddb"
 
-  httpstatus=0
   retry=0
-  while [ $httpstatus != "200" ] && [ "$retry" -lt 3 ]; do
+  file_lenght=0
+  while [[ "$file_lenght" -lt "10000000000" ]]; do
     index=$(shuf -i 0-24 -n 1)
     echo "Testing bootstrap location ${BOOTSTRAPLOCATIONS[$index]}"
-    httpstatus=$(curl --write-out '%{http_code}' --silent --connect-timeout 5 --head --output /dev/null ${BOOTSTRAPLOCATIONS[$index]})
-    echo "Http status $httpstatus"
-    retry=$(expr $retry + 1)
-  done
+    file_lenght=$(curl -sI  -m 5 ${BOOTSTRAPLOCATIONS[$index]} | grep -i Content-Length | awk '{print $2}' | sed 's/[^0-9]*//g')
 
-  if [ $httpstatus == "200" ]; then
+   if [[ $file_lenght -gt "10000000000" ]]; then
+    echo "File lenght: $file_lenght"
+   else
+    echo "File not exist! Source skipped..."
+   fi
+   
+  retry=$(expr $retry + 1)
+ done
+
+
+  if [[ ${file_lenght} -gt 10000000000 ]]; then
     echo "Bootstrap location valid"
     echo "Downloading bootstrap"
     # Install database

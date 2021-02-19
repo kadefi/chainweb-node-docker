@@ -79,16 +79,16 @@ else
     echo "Testing bootstrap location ${BOOTSTRAPLOCATIONS[$index]}"
     file_lenght=$(curl -sI  -m 5 ${BOOTSTRAPLOCATIONS[$index]} | grep 'Content-Length' | sed 's/[^0-9]*//g')
 
-if [[ "$file_lenght" -gt "10000000000" ]]; then
-echo "File lenght: $file_lenght"
-else
-echo "File not exist! Source skipped..."
-fi
-  retry=$(expr $retry + 1)
- done
+    if [[ "$file_lenght" -gt "10000000000" ]]; then
+      echo "File lenght: $file_lenght"
+    else
+      echo "File not exist! Source skipped..."
+    fi
+    retry=$(expr $retry + 1)
+  done
 
 
-  if [[ "$file_lenght" -gt 10000000000 ]]; then
+  if [[ "$file_lenght" -gt "10000000000" ]]; then
     echo "Bootstrap location valid"
     echo "Downloading bootstrap"
     # Install database
@@ -99,4 +99,3 @@ fi
     echo "None bootstrap was found, will download blockchain from node peers"
   fi
 fi
-

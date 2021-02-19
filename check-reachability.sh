@@ -8,8 +8,8 @@
 HOST=$1
 PORT=$2
 
-CHAINWEB_NETWORK=${CHAINWEB_NETWORK:-testnet04}
-CHAINWEB_BOOTSTRAP_NODE=${CHAINWEB_BOOTSTRAP_NODE:-us1.testnet.chainweb.com}
+CHAINWEB_NETWORK=${CHAINWEB_NETWORK:-mainnet01}
+CHAINWEB_BOOTSTRAP_NODE=${CHAINWEB_BOOTSTRAP_NODE:-us-e1.chainweb.com}
 
 # ############################################################################ #
 # Temporary files
@@ -69,4 +69,3 @@ curl "https://$CHAINWEB_BOOTSTRAP_NODE/chainweb/0.0/$CHAINWEB_NETWORK/cut/peer" 
     -v \
     -d "$PEER_INFO" 2>&1 |
     grep -q "< HTTP/2 204\|missing X-Chainweb-Node-Version header"
-

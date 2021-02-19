@@ -5,16 +5,17 @@
 
 export CHAINWEB_NETWORK=${CHAINWEB_NETWORK:-mainnet01}
 export CHAINWEB_BOOTSTRAP_NODE=${CHAINWEB_BOOTSTRAP_NODE:-us-e1.chainweb.com}
-export CHAINWEB_PORT=${CHAINWEB_PORT:-443}
+export CHAINWEB_P2P_PORT=${CHAINWEB_P2P_PORT:-1789}
+export CHAINWEB_SERVICE_PORT=${CHAINWEB_SERVICE_PORT:-1848}
 export LOGLEVEL=${LOGLEVEL:-warn}
 export MINER_KEY=${MINER_KEY:-}
 export MINER_ACCOUNT=${MINER_ACCOUNT:-$MINER_KEY}
 export ENABLE_ROSETTA=${ENABLE_ROSETTA:-}
 
-if [[ -z "$CHAINWEB_HOST" ]] ; then
-    CHAINWEB_HOST=$(curl -sL 'https://api.ipify.org?format=text')
+if [[ -z "$CHAINWEB_P2P_HOST" ]] ; then
+    CHAINWEB_P2P_HOST=$(curl -sL 'https://api.ipify.org?format=text')
 fi
-export CHAINWEB_HOST
+export CHAINWEB_P2P_HOST
 
 # ############################################################################ #
 # Check ulimit
@@ -30,17 +31,7 @@ UL=$(ulimit -n -S)
 # ############################################################################ #
 # Check connectivity
 
-curl -fsL "https://$CHAINWEB_BOOTSTRAP_NODE/info" > /dev/null ||
-{
-    echo "Node is unable to connect the chainweb boostrap node: $CHAINWEB_BOOTSTRAP_NODE" 1>&2
-    exit 1
-}
-
-./check-reachability.sh "$CHAINWEB_HOST" "$CHAINWEB_PORT" ||
-{
-    echo "Node is not reachable under its public host address $CHAINWEB_HOST:$CHAINWEB_PORT" 1>&2
-    exit 1
-}
+echo "Reachability check skipped"
 
 # ############################################################################ #
 # Create chainweb database directory
@@ -49,15 +40,6 @@ curl -fsL "https://$CHAINWEB_BOOTSTRAP_NODE/info" > /dev/null ||
 
 DBDIR="/data/chainweb-db"
 mkdir -p "$DBDIR/0"
-
-# upgrade docker data volume format from image version 2.1 to 2.1.1
-#
-if [[ -d "$DBDIR/rocksDb" ]] ; then
-    mv "$DBDIR/rocksDb" "$DBDIR/0/rocksDb"
-fi
-if [[ -d "$DBDIR/sqlite" ]] ; then
-    mv "$DBDIR/sqlite" "$DBDIR/0/sqlite"
-fi
 
 # ############################################################################ #
 # Configure Miner
@@ -97,8 +79,9 @@ fi
 exec ./chainweb-node \
     --config-file=chainweb.yaml \
     --config-file <(echo "$MINER_CONFIG") \
-    --hostname="$CHAINWEB_HOST" \
-    --port="$CHAINWEB_PORT" \
+    --p2p-hostname="$CHAINWEB_P2P_HOST" \
+    --p2p-port="$CHAINWEB_P2P_PORT" \
+    --service-port="$CHAINWEB_SERVICE_PORT" \
     "$ROSETTA_FLAG" \
     --log-level="$LOGLEVEL" \
     +RTS -N -t -A64M -H500M -RTS \

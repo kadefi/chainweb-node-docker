@@ -4,15 +4,28 @@
 #
 # --ulimit nofile=64000:64000
 
-FROM ubuntu:18.04
+# BUILD PARAMTERS
+ARG UBUNTUVER=18.04
+
+FROM ubuntu:${UBUNTUVER}
+
+ARG REVISION=15111ad
+ARG GHCVER=8.8.4
+ARG UBUNTUVER
+
+LABEL revision="$REVISION"
+LABEL ghc="$GHCVER"
+LABEL ubuntu="$UBUNTUVER"
 
 # install prerequisites
-RUN apt-get update && apt-get install -y librocksdb-dev curl xxd openssl jq
+RUN apt-get update \
+    && apt-get install -y librocksdb-dev curl xxd openssl binutils jq \
+    && rm -rf /var/lib/apt/lists/*
 
 # Install chainweb applications
 WORKDIR /chainweb
 # RUN curl -Ls "https://github.com/kadena-io/chainweb-node/releases/download/<chaineweb-version>/<chainweb-binary-version>" | tar -xzC "/chainweb/"
-RUN curl -Ls "https://kadena-cabal-cache.s3.amazonaws.com/chainweb-node/chainweb.8.8.4.ubuntu-18.04.c740c5e.tar.gz" | tar -xzC "/"
+RUN curl -Ls "https://kadena-cabal-cache.s3.amazonaws.com/chainweb-node/chainweb.${GHCVER}.ubuntu-${UBUNTUVER}.${REVISION}.tar.gz" | tar -xzC "/"
 
 COPY check-reachability.sh .
 COPY run-chainweb-node.sh .
@@ -25,6 +38,8 @@ RUN mkdir -p /root/.local/share/chainweb-node/mainnet01/
 
 STOPSIGNAL SIGTERM
 EXPOSE 443
-HEALTHCHECK --start-period=5m --interval=1m --retries=5 --timeout=10s CMD ./check-health.sh
+EXPOSE 80
+EXPOSE 1789
+HEALTHCHECK --start-period=10m --interval=1m --retries=5 --timeout=10s CMD ./check-health.sh
 
 CMD ./run-chainweb-node.sh

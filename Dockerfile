@@ -19,7 +19,7 @@ LABEL ubuntu="$UBUNTUVER"
 
 # install prerequisites
 RUN apt-get update \
-    && apt-get install -y librocksdb-dev curl xxd openssl binutils \
+    && apt-get install -y librocksdb-dev curl xxd openssl binutils jq \
     && rm -rf /var/lib/apt/lists/*
 
 # Install chainweb applications

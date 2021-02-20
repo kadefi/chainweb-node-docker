@@ -1,21 +1,24 @@
 # Quick Setup
 
 1.  *(Skip this step if you run the Chainweb node in data center.)* Log into your
-    router and configure port forwarding for port 443 to your computer.
+    router and configure port forwarding for port 1789 to your computer.
 
-2.  Make sure that your firewall allows incoming connection on port 443.
+2.  Make sure that your firewall allows incoming connection on port 1789.
 
 3.  Initialize database *(optional but saves several hours of db synchronization
     on node startup.)*:
 
+    First you need a database snapshot URL. See below, how to obtain a database
+    snapshot.
+
     ```sh
-    docker run -ti --rm -v chainweb-data:/data kadena/chainweb-node /chainweb/initialize-db.sh
+    docker run -ti --rm -e DBURL=YOUR_DB_SNAPSHOT_URL -v chainweb-data:/data kadena/chainweb-node /chainweb/initialize-db.sh
     ```
 
 4.  Start Chainweb node:
 
     ```sh
-    docker run -d -p 443:443 -v chainweb-data:/data kadena/chainweb-node
+    docker run -d -p 1789:1789 -p 1848:1848 -v chainweb-data:/data kadena/chainweb-node
     ```
 
 For explanations and additional configuration options (like, for instance, using
@@ -32,24 +35,40 @@ For instance AWS EC2 t3a.medium VMs with 50GB SSD root storage are known to work
 
 # Running a Chainweb Node as Docker Container
 
+A Chainweb node serves two separate APIs:
+
+1.  The P2P API includes all endpoints that are used for node-to-node
+    communication. It is served via HTTPS and must be reachable from the public
+    internet.
+
+2.  The Service API includes all routes that off Kadena chainweb services to
+    users and applications. It is served as plain (unencrypted) HTTP and can
+    kept private. It is also possible to use this API with a reverse proxy.
+
+More details about these APIs can be found further down in this document.
+
 **A Chainweb node must be reachable from the public internet**. It needs a
 public IP address and port. If you run the node from a data center, usually, you
-only have to ensure that it can be reached on the default port 443. You can use
+only have to ensure that it can be reached on the default P2P port *1789*. You can use
 the following shell command to start the node.
 
 ```sh
-docker run -d -p 443:443 kadena/chainweb-node
+docker run -d -p 1848:1848 -p 1789:1789 kadena/chainweb-node
 ```
+
+This exposes the P2P network on HTTPS port 1789 and the API services of chainweb
+node on HTTP port 1848.
 
 If you are running the node from a local network with NAT (network address
 translation), which is the case for most home networks, you'll have to configure
-port forwarding in your router.
+port forwarding for the P2P port (1789) in your router.
 
-Using a different port is possible, too. For that the public port number must be
-provided the Chainweb node in the environment.
+Using different ports is possible, too, as long as the internal and external
+port of the docker container match. For instance, the following command exposes
+the P2P network on port 443.
 
 ```sh
-docker run -d -p 1789:1789 -e "CHAINWEB_PORT=1789" kadena/chainweb-node
+docker run -d -p 1848:1848 -p 443:443 -e "CHAINWEB_P2P_PORT=443" kadena/chainweb-node
 ```
 
 More options to configure the node are described at the bottom of this document.
@@ -66,12 +85,58 @@ in this document.
 
 When the container is started for the first time it has to synchronize and
 rebuild the Chainweb database from the P2P network. This can take a long time.
-Currently, as of 2020-09-17, this takes about 2-3 days for a node in a well
+Currently, as of 2021-02-17, this takes about 2-3 days for a node in a well
 connected data center.
 
 The container includes a script for synchronizing a pre-build database, which
-currently, as of 2020-09-17, involves downloading about 10GB of data from an S3
-container.
+currently, as of 2021-02-17, involves downloading about 15GB of data.
+
+A database snapshot is just a gzipped tar archive of the Chainweb database,
+which contains the subdirectories `rocksDb` and `sqlite`. The URL can point to
+remote location or a local file. Any URL that curl understands is fine.
+
+Database snapshots are available from different sources. Kadena offers an
+up-to-date snapshot at
+https://kadena-node-db.s3.us-east-2.amazonaws.com/db-chainweb-node-ubuntu.18.04-latest.tar.gz.
+This file is stored in a request-pays S3 bucket. In order to access it you need
+an AWS account and you must create and signed URL for authenticating with S3.
+Details about how to do this can be found here:
+https://docs.aws.amazon.com/AmazonS3/latest/userguide/ObjectsinRequesterPaysBuckets.html
+
+With `node.js` you can create a signed URL for above snapshot URL as follows:
+
+```js
+// get-chainweb-image-url.js
+AWS = require("aws-sdk");
+const s3 = new AWS.S3({
+  accessKeyId: AWS_ACCESS_KEY_ID, // Add your Access Key ID from IAM
+  secretAccessKey: AWS_SECRET_ACCESS_KEY, // Add your Secret Access Key from IAM
+  region: "us-east-2"
+})
+const params = {
+  Bucket: 'kadena-node-db',
+  Expires: 3600,
+  Key: 'db-chainweb-node-ubuntu.18.04-latest.tar.gz',
+  RequestPayer: 'requester'
+}
+// When ran, the script will output exclusively the signed url
+s3.getSignedUrl("getObject", params, (_err, res) => console.log(res))
+```
+
+With Python one can use the following code:
+
+```python
+import boto3
+client = boto3.client('s3')
+url  = client.generate_presigned_url(
+    "get_object",
+    Params = {
+        "Bucket":"kadena-node-db",
+        "Key":"db-chainweb-node-ubuntu.18.04-latest.tar.gz",
+        "RequestPayer":'requester'
+    }
+)
+```
 
 ### Database within Chainweb node container
 
@@ -79,7 +144,9 @@ The following shell commands initializes a docker container with a database and
 creates a new image from it.
 
 ```sh
-docker run -ti --name initialize-chainweb-db kadena/chainweb-node /chainweb/initialize-db.sh
+npm install aws-sdk
+YOUR_DB_SNAPSHOT_URL=$(node get-chainweb-image-url.js) # assuming you use get-chainweb-image-url.js form above
+docker run -ti --name initialize-chainweb-db -e DBURL=$YOUR_DB_SNAPSHOT_URL kadena/chainweb-node /chainweb/initialize-db.sh
 docker commit `docker ps -a -f 'name=initialize-chainweb-db' -q` chainweb-node-with-db
 docker rm initialize-chainweb-db
 ```
@@ -90,7 +157,8 @@ follows:
 ```sh
 docker run \
     --detach \
-    --publish 443:443 \
+    --publish 1848:1848 \
+    --publish 1789:1789 \
     --name chainweb-node \
     chainweb-node-with-db \
     /chainweb/run-chainweb-node.sh
@@ -106,16 +174,22 @@ It is therefore recommended to store the Chainweb database outside the container
 on a docker volume (preferred method) or in the file system of the host system.
 
 ```sh
-# 1. Initialize a database that is persisted on a docker volume
+# 1. Get signed database snapshot URL (assuming you use get-chainweb-image-url.js form above)
+npm install aws-sdk
+YOUR_DB_SNAPSHOT_URL=$(node get-chainweb-image-url.js)
+
+# 2. Initialize a database that is persisted on a docker volume
 docker run -ti --rm \
     --mount type=volume,source=chainweb-data,target=/data \
+    --env DBURL=$YOUR_DB_SNAPSHOT_URL \
     kadena/chainweb-node \
     /chainweb/initialize-db.sh
 
-# 2. Use the database volume with a Chainweb node
+# 3. Use the database volume with a Chainweb node
 docker run \
     --detach \
-    --publish 443:443 \
+    --publish 1848:1848 \
+    --publish 1789:1789 \
     --name chainweb-node \
     --mount type=volume,source=chainweb-data,target=/data \
     kadena/chainweb-node
@@ -138,7 +212,8 @@ The following example provides a public miner key and an account name:
 ```sh
 docker run \
     --detach \
-    --publish 443:443 \
+    --publish 1848:1848 \
+    --publish 1789:1789 \
     --env "MINER_KEY=26a9285cd8db34702cfef27a5339179b5a26373f03dd94e2096b0b3ba6c417da" \
     --env "MINER_ACCOUNT=merle" \
     --name chainweb-node \
@@ -162,12 +237,17 @@ by setting the `ROSETTA` environment variable to any non-empty value.
 ```sh
 docker run \
     --detach \
-    --publish 443:443 \
+    --publish 1848:1848 \
+    --publish 1789:1789 \
     --env "ROSETTA=1" \
     --name chainweb-node \
     --mount type=volume,source=chainweb-data,target=/data \
     kadena/chainweb-node
 ```
+
+# API Overview
+
+TODO
 
 # Verifying database consistency
 
@@ -200,15 +280,20 @@ certificates using docker volumes.
 
 ### File System
 
-*   Database directory: `/root/.local/share/chainweb-node/mainnet01/0`
-*   Chainweb configuration file: `/chainweb/chainweb.yaml`
+*   Database directory: `/data/chainweb-db`
+*   Chainweb configuration file: `/chainweb/chainweb.mainnet01.yaml`
 
 ### Available Configuration Options
 
-*   `CHAINWEB_PORT`: the network port that is used by the Chainweb node.
-    The port that is used internally in the container *must* match the port that
-    is used publicly. A appropriate port mapping must be passed to the `docker
-    run` command, e.g. `-p 443:443`. (default: `443`)
+*   `CHAINWEB_P2P_PORT`: the network port that is used by the Chainweb P2P
+    network. The port that is used internally in the container *must* match the
+    port that is used publicly. A appropriate port mapping must be passed to the
+    `docker run` command, e.g. `-p 443:443`. (default: `1789`)
+
+*   `CHAINWEB_SERVICE_PORT`: the network port that is used by the Chainweb
+    REST Service API. The port that is used internally in the container *must* match
+    the port that is used publicly. A appropriate port mapping must be passed to
+    the `docker run` command, e.g. `-p 8000:8000`. (default: `80`)
 
 *   `CHAINWEB_BOOTSTRAP_NODE`: a Chainweb node that is used to check the
     connectivity of the container before starting the node. (default:
@@ -219,7 +304,7 @@ certificates using docker volumes.
     The value `debug` should be avoid during normal production.
     (default: `warn`).
 
-*   `CHAINWEB_HOST`: the public IP address of the node. (default: automatically
+*   `CHAINWEB_P2P_HOST`: the public IP address of the node. (default: automatically
     detected)
 
 *   `MINER_KEY`: the public key of the miner. If this is empty or unset
@@ -238,14 +323,21 @@ certificates using docker volumes.
     *    option for enabled the header stream
     *    explain how to overwrite the configuration file
 
+Options for `/chainweb/initialize-db.sh`
+
+*   `DBURL`: The URL from where the database snapshot is downloaded. We
+    recommend that users maintain there own database snapshots.
+
 Here is an example for how to use these settings:
 
 ```sh
 docker run \
     --detach \
+    --publish 8000:8000 \
     --publish 1789:1789 \
     --name chainweb-node \
-    --env "CHAINWEB_PORT=1789" \
+    --env "CHAINWEB_P2P_PORT=1789" \
+    --env "CHAINWEB_SERVICE_PORT=8000" \
     --env "CHAINWEB_BOOTSTRAP_NODE=fr2.chainweb.com" \
     --env "LOGLEVEL=warn" \
     --env "MINER_KEY=774723b442c6ee660a0ac34747374fcd451591a123b35df5f4a69f1e9cb2cc75" \
@@ -255,3 +347,20 @@ docker run \
     kadena/chainweb-node
 ```
 
+### API Endpoints
+
+P2P API (inter-node communication)
+
+*   cut endpoint
+*   chain header endpoints
+*   chain payload endpoints
+*   chain mempool endpoints
+
+Service API
+
+*   Pact endpoints
+*   Mining endpoints
+*   Rosetta endpoints
+*   header-update-stream endpoint
+*   info endpoint
+*   health-check endpoint

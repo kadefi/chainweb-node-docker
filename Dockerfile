@@ -5,12 +5,12 @@
 # --ulimit nofile=64000:64000
 
 # BUILD PARAMTERS
-ARG UBUNTUVER=18.04
+ARG UBUNTUVER=20.04
 
 FROM ubuntu:${UBUNTUVER}
 
-ARG REVISION=15111ad
-ARG GHCVER=8.8.4
+ARG REVISION=dfcc08b
+ARG GHCVER=8.10.3
 ARG UBUNTUVER
 
 LABEL revision="$REVISION"
@@ -19,7 +19,7 @@ LABEL ubuntu="$UBUNTUVER"
 
 # install prerequisites
 RUN apt-get update \
-    && apt-get install -y librocksdb-dev curl xxd openssl binutils \
+    && apt-get install -y librocksdb-dev curl xxd openssl binutils jq \
     && rm -rf /var/lib/apt/lists/*
 
 # Install chainweb applications
@@ -40,6 +40,7 @@ STOPSIGNAL SIGTERM
 EXPOSE 443
 EXPOSE 80
 EXPOSE 1789
+EXPOSE 1848
 HEALTHCHECK --start-period=10m --interval=1m --retries=5 --timeout=10s CMD ./check-health.sh
 
 CMD ./run-chainweb-node.sh

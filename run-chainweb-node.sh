@@ -4,7 +4,6 @@
 # PARAMETERS
 
 export CHAINWEB_NETWORK=${CHAINWEB_NETWORK:-mainnet01}
-export CHAINWEB_BOOTSTRAP_NODE=${CHAINWEB_BOOTSTRAP_NODE:-us-e1.chainweb.com}
 export CHAINWEB_P2P_PORT=${CHAINWEB_P2P_PORT:-1789}
 export CHAINWEB_SERVICE_PORT=${CHAINWEB_SERVICE_PORT:-1848}
 export LOGLEVEL=${LOGLEVEL:-warn}
@@ -13,7 +12,7 @@ export MINER_ACCOUNT=${MINER_ACCOUNT:-$MINER_KEY}
 export ENABLE_ROSETTA=${ENABLE_ROSETTA:-}
 
 if [[ -z "$CHAINWEB_P2P_HOST" ]] ; then
-    CHAINWEB_P2P_HOST=$(curl -sL 'https://api.ipify.org?format=text')
+    CHAINWEB_P2P_HOST="0.0.0.0"
 fi
 export CHAINWEB_P2P_HOST
 
@@ -27,11 +26,6 @@ UL=$(ulimit -n -S)
     echo "Try starting the container with '--ulimit \"nofile=65536:65536\"'" 1>&2
     exit 1
 }
-
-# ############################################################################ #
-# Check connectivity
-
-echo "Reachability check skipped"
 
 # ############################################################################ #
 # Create chainweb database directory

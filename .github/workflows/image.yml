@@ -19,5 +19,5 @@ jobs:
       - name: build the image
         run: |
           docker buildx build --push \
-            --tag zelcash/kadena-chainweb-node:2.7 \
+            --tag runonflux/kadena-chainweb-node:2.7 \
             --platform linux/amd64,linux/arm64 .

@@ -20,4 +20,4 @@ jobs:
         run: |
           docker buildx build --push \
             --tag runonflux/kadena-chainweb-node:2.7 \
-            --platform linux/amd64,linux/arm64 .
+            --platform linux/amd64 .

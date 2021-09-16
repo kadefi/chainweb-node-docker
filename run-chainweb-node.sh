@@ -73,6 +73,7 @@ fi
 exec ./chainweb-node \
     --config-file=chainweb.yaml \
     --config-file <(echo "$MINER_CONFIG") \
+    --bootstrap-reachability=0 \
     --p2p-hostname="$CHAINWEB_P2P_HOST" \
     --p2p-port="$CHAINWEB_P2P_PORT" \
     --service-port="$CHAINWEB_SERVICE_PORT" \

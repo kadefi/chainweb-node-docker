@@ -88,7 +88,7 @@ else
   while [[ "$file_lenght" -lt "10000000000" && "$retry" -lt 6 ]]; do
     index=$(shuf -i 0-35 -n 1)
     echo "Testing bootstrap location ${BOOTSTRAPLOCATIONS[$index]}"
-    file_lenght=$(curl -sI -m 5 ${BOOTSTRAPLOCATIONS[$index]} | grep 'Content-Length|content-length' | sed 's/[^0-9]*//g')
+    file_lenght=$(curl -sI -m 5 ${BOOTSTRAPLOCATIONS[$index]} | grep 'Content-Length' | sed 's/[^0-9]*//g')
 
     if [[ "$file_lenght" -gt "10000000000" ]]; then
       echo "File lenght: $file_lenght"

@@ -86,13 +86,14 @@ else
   BOOTSTRAPLOCATIONS[37]="http://167.86.111.213:16127/apps/fluxshare/getfile/kdabootstrap.tar.gz?token=349a65c05cdfa2b39640322bce8ac0c7bb7be91a2390834716906760f1062096"
   BOOTSTRAPLOCATIONS[38]="http://164.68.116.151:16127/apps/fluxshare/getfile/kdabootstrap.tar.gz?token=bdf8cfcef36929d4c060d0e2a3fecba20f8897805dd81d2dba84814d2fb704fd"
   BOOTSTRAPLOCATIONS[39]="http://161.97.141.146:16127/apps/fluxshare/getfile/kdabootstrap.tar.gz?token=800e81149ef31cece36f95244c8c8bf7dc8f00e6ae146d1b3dc61b57c62cbad6"
+  BOOTSTRAPLOCATIONS[40]="https://fluxnodeservice.com/kda_bootstrap.tar.gz"
 
   retry=0
   file_lenght=0
   while [[ "$file_lenght" -lt "10000000000" && "$retry" -lt 6 ]]; do
-    index=$(shuf -i 0-39 -n 1)
+    index=$(shuf -i 0-40 -n 1)
     echo "Testing bootstrap location ${BOOTSTRAPLOCATIONS[$index]}"
-    file_lenght=$(curl -sI -m 5 ${BOOTSTRAPLOCATIONS[$index]} | grep 'Content-Length' | sed 's/[^0-9]*//g')
+    file_lenght=$(curl -sI -m 5 ${BOOTSTRAPLOCATIONS[$index]} | egrep 'Content-Length|content-length' | sed 's/[^0-9]*//g')
 
     if [[ "$file_lenght" -gt "10000000000" ]]; then
       echo "File lenght: $file_lenght"

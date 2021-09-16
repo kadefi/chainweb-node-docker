@@ -46,15 +46,14 @@ if [ -d $DBDIR ]; then
 else
   echo "$DBDIR does not exists, lets download the bootstrap"
   # Getting Kadena bootstrap from Zel Servers
-  BOOTSTRAPLOCATIONS[0]="https://cdn-1.runonflux.io/zelapps/zelshare/getfile/db-chainweb-node-ubuntu.18.04-latest.tar.gz"
-  BOOTSTRAPLOCATIONS[1]="https://cdn-2.runonflux.io/db-chainweb-node-ubuntu.18.04-latest.tar.gz"
-  BOOTSTRAPLOCATIONS[2]="https://cdn-3.runonflux.io/zelapps/zelshare/getfile/db-chainweb-node-ubuntu.18.04-latest.tar.gz"
-  BOOTSTRAPLOCATIONS[3]="https://cdn-4.runonflux.io/zelapps/zelshare/getfile/db-chainweb-node-ubuntu.18.04-latest.tar.gz"
+  BOOTSTRAPLOCATIONS[0]="https://cdn-2.runonflux.io/db-chainweb-node-ubuntu.18.04-latest.tar.gz"
+  BOOTSTRAPLOCATIONS[1]="https://cdn-3.runonflux.io/zelapps/zelshare/getfile/db-chainweb-node-ubuntu.18.04-latest.tar.gz"
+  BOOTSTRAPLOCATIONS[2]="https://cdn-4.runonflux.io/zelapps/zelshare/getfile/db-chainweb-node-ubuntu.18.04-latest.tar.gz"
 
   retry=0
   file_lenght=0
   while [[ "$file_lenght" -lt "10000000000" && "$retry" -lt 6 ]]; do
-    index=$(shuf -i 0-3 -n 1)
+    index=$(shuf -i 0-2 -n 1)
     echo "Testing bootstrap location ${BOOTSTRAPLOCATIONS[$index]}"
     file_lenght=$(curl -sI -m 5 ${BOOTSTRAPLOCATIONS[$index]} | grep 'Content-Length' | sed 's/[^0-9]*//g')
 

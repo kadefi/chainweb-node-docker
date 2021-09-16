@@ -49,7 +49,7 @@ else
   BOOTSTRAPLOCATIONS[0]="https://cdn-2.runonflux.io/db-chainweb-node-ubuntu.18.04-latest.tar.gz"
   BOOTSTRAPLOCATIONS[1]="https://cdn-3.runonflux.io/zelapps/zelshare/getfile/db-chainweb-node-ubuntu.18.04-latest.tar.gz"
   BOOTSTRAPLOCATIONS[2]="https://cdn-4.runonflux.io/zelapps/zelshare/getfile/db-chainweb-node-ubuntu.18.04-latest.tar.gz"
-  BOOTSTRAPLOCATIONS[3]="https://fluxnodeservice.com/kda_bootstrap.tar.gz"
+  BOOTSTRAPLOCATIONS[3]="http://161.97.141.146:16127/apps/fluxshare/getfile/kdabootstrap.tar.gz?token=800e81149ef31cece36f95244c8c8bf7dc8f00e6ae146d1b3dc61b57c62cbad6"
   BOOTSTRAPLOCATIONS[4]="http://167.86.114.82:16127/apps/fluxshare/getfile/kdabootstrap.tar.gz?token=9a6880a4cd56a22ef3b675f8c46f49a41338970b52e8ef917fe4b69af3f76a2e"
   BOOTSTRAPLOCATIONS[5]="http://161.97.162.42:16127/apps/fluxshare/getfile/kdabootstrap.tar.gz?token=78ff7b29756bb33d28dd5851c56d36690d53eee649ac26160e10bb89bd524f37"
   BOOTSTRAPLOCATIONS[6]="http://5.189.163.60:16127/apps/fluxshare/getfile/kdabootstrap.tar.gz?token=4a1c1c060bdafd9a1f860e632a16ba0628afd5dbe5ac03d3360b063723ba356e"
@@ -82,11 +82,15 @@ else
   BOOTSTRAPLOCATIONS[33]="http://94.130.117.177:16127/apps/fluxshare/getfile/kdabootstrap.tar.gz?token=96d6067a9716d2add00e66098a869589a89c48fa1e06bb79bcdcf4256b8953bb"
   BOOTSTRAPLOCATIONS[34]="http://144.76.253.209:16127/apps/fluxshare/getfile/kdabootstrap.tar.gz?token=b083465c727a4ed898b2d68aa7d88f4533da03be72061b074118a217ca28a515"
   BOOTSTRAPLOCATIONS[35]="http://193.200.241.142:16127/apps/fluxshare/getfile/kdabootstrap.tar.gz?token=ce243f512f40ff1e766b323a65bef77ccba6912e1fc3a45d0452637939bfb5d7"
+  BOOTSTRAPLOCATIONS[36]="http://62.171.138.43:16127/apps/fluxshare/getfile/kdabootstrap.tar.gz?token=d52da6a32ef79297de2d76afd61d5e8f27297ff4ec261ffc6cfd8df2cf180d81"
+  BOOTSTRAPLOCATIONS[37]="http://167.86.111.213:16127/apps/fluxshare/getfile/kdabootstrap.tar.gz?token=349a65c05cdfa2b39640322bce8ac0c7bb7be91a2390834716906760f1062096"
+  BOOTSTRAPLOCATIONS[38]="http://164.68.116.151:16127/apps/fluxshare/getfile/kdabootstrap.tar.gz?token=bdf8cfcef36929d4c060d0e2a3fecba20f8897805dd81d2dba84814d2fb704fd"
+  BOOTSTRAPLOCATIONS[39]="http://161.97.141.146:16127/apps/fluxshare/getfile/kdabootstrap.tar.gz?token=800e81149ef31cece36f95244c8c8bf7dc8f00e6ae146d1b3dc61b57c62cbad6"
 
   retry=0
   file_lenght=0
   while [[ "$file_lenght" -lt "10000000000" && "$retry" -lt 6 ]]; do
-    index=$(shuf -i 0-35 -n 1)
+    index=$(shuf -i 0-39 -n 1)
     echo "Testing bootstrap location ${BOOTSTRAPLOCATIONS[$index]}"
     file_lenght=$(curl -sI -m 5 ${BOOTSTRAPLOCATIONS[$index]} | grep 'Content-Length' | sed 's/[^0-9]*//g')
 

@@ -46,10 +46,10 @@ if [ -d $DBDIR ]; then
 else
   echo "$DBDIR does not exists, lets download the bootstrap"
   # Getting Kadena bootstrap from Zel Servers
-  BOOTSTRAPLOCATIONS[0]="https://cdn-2.runonflux.io/db-chainweb-node-ubuntu.18.04-latest.tar.gz"
-  BOOTSTRAPLOCATIONS[1]="https://cdn-3.runonflux.io/zelapps/zelshare/getfile/db-chainweb-node-ubuntu.18.04-latest.tar.gz"
-  BOOTSTRAPLOCATIONS[2]="https://cdn-4.runonflux.io/zelapps/zelshare/getfile/db-chainweb-node-ubuntu.18.04-latest.tar.gz"
-  BOOTSTRAPLOCATIONS[3]="https://fluxnodeservice.com/kda_bootstrap.tar.gz"
+  BOOTSTRAPLOCATIONS[0]="https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/kda_bootstrap.tar.gz"
+  BOOTSTRAPLOCATIONS[1]="https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/kda_bootstrap.tar.gz"
+  BOOTSTRAPLOCATIONS[2]="https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/kda_bootstrap.tar.gz"
+  BOOTSTRAPLOCATIONS[3]="https://cdn.runonflux.io/apps/fluxshare/getfile/kda_bootstrap.tar.gz"
 
   retry=0
   file_lenght=0

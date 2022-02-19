@@ -19,5 +19,5 @@ jobs:
       - name: build the image
         run: |
           docker buildx build --push \
-            --tag runonflux/kadena-chainweb-node:2.12.1 \
+            --tag runonflux/kadena-chainweb-node:2.13.0 \
             --platform linux/amd64 .

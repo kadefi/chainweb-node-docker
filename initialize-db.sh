@@ -49,11 +49,12 @@ else
   BOOTSTRAPLOCATIONS[0]="https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/kda_bootstrap.tar.gz"
   BOOTSTRAPLOCATIONS[1]="https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/kda_bootstrap.tar.gz"
   BOOTSTRAPLOCATIONS[2]="https://runonflux.zelcore.workers.dev/apps/fluxshare/getfile/kda_bootstrap.tar.gz"
+  BOOTSTRAPLOCATIONS[3]="https://cdn.runonflux.io/apps/fluxshare/getfile/kda_bootstrap.tar.gz"
 
   retry=0
   file_lenght=0
   while [[ "$file_lenght" -lt "10000000000" && "$retry" -lt 6 ]]; do
-    index=$(shuf -i 0-2 -n 1)
+    index=$(shuf -i 0-3 -n 1)
     echo "Testing bootstrap location ${BOOTSTRAPLOCATIONS[$index]}"
     file_lenght=$(curl -sI -m 5 ${BOOTSTRAPLOCATIONS[$index]} | egrep 'Content-Length|content-length' | sed 's/[^0-9]*//g')
 

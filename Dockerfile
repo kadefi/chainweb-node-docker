@@ -9,7 +9,7 @@ ARG UBUNTUVER=20.04
 
 FROM ubuntu:${UBUNTUVER}
 
-ARG REVISION=b4b8bda
+ARG REVISION=40d848f
 ARG GHCVER=8.10.7
 ARG UBUNTUVER
 
@@ -19,8 +19,12 @@ LABEL ubuntu="$UBUNTUVER"
 
 # install prerequisites
 RUN apt-get update \
-    && apt-get install -y librocksdb-dev curl xxd openssl binutils jq \
-    && rm -rf /var/lib/apt/lists/*
+    && apt-get install -y librocksdb-dev curl xxd openssl binutils locales \
+    && rm -rf /var/lib/apt/lists/* \
+    && locale-gen en_US.UTF-8 \
+    && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
+
+ENV LANG=en_US.UTF-8
 
 # Install chainweb applications
 WORKDIR /chainweb

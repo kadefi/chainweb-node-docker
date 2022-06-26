@@ -2,7 +2,7 @@ databaseDirectory: /data/chainweb-db
 resetChainDatabases: false
 chainweb:
   throttling:
-    local: 10
+    local: 100
     mining: 10
     global: 1000
     putPeer: 30

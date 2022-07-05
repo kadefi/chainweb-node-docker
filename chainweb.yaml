@@ -2,11 +2,12 @@ databaseDirectory: /data/chainweb-db
 resetChainDatabases: false
 chainweb:
   throttling:
-    local: 100
+    local: 4000
     mining: 10
-    global: 1000
+    global: 5000
     putPeer: 30
   chainwebVersion: mainnet01
+  pactQueueSize: 4000
   mining:
     coordination:
       enabled: false

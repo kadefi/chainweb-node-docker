@@ -9,7 +9,10 @@ const CHAIN_IDS =
 
 class PactDBClient {
   constructor() {
-    this.dbs = CHAIN_IDS.map((id) => new Database(PACT_SQLITE_FILENAME(id)));
+    this.dbs = CHAIN_IDS.map((id) => {
+      console.log(`connecting to ${PACT_SQLITE_FILENAME(id)}`);
+      return new Database(PACT_SQLITE_FILENAME(id));
+    });
   }
 
   getReserve(balanceObject) {

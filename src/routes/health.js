@@ -38,7 +38,9 @@ const kadenaGetHeight = async () => {
 
 healthRouter.get("/health", async (req, res) => {
   const isSynced = await kadenaCheckHeight();
-  return isSynced ? res.status(200).send() : res.status(500).send();
+  return isSynced
+    ? res.status(200).send("Health check OK")
+    : res.status(500).send("Health check failed");
 });
 
 export default healthRouter;

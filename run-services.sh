@@ -12,7 +12,7 @@ export CHAINWEB_P2P_PORT=${CHAINWEB_P2P_PORT:-1789}
 while ! (curl -fsLk "https://api.chainweb.com/chainweb/0.0/$CHAINWEB_NETWORK/cut")
 do 
   echo "cut endpoint not up yet sleeping 30s"
-  sleep 1s
+  sleep 30s
 done
 
 echo "starting pact db api"

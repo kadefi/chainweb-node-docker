@@ -10,11 +10,20 @@ const dbClient = new PactDBClient();
 indexRouter.get("/:table/:walletAddress", (req, res) => {
   const { table, walletAddress } = req.params;
   try {
-    const balances = dbClient.queryAllChain(walletAddress, table);
-    if (!_.isEmpty(balances.chains)) {
-      res.status(200).json(balances);
+    if (table === "kaddex.skdx_token-table") {
+      const balances = dbClient.querySingleChain(2, walletAddress, table);
+      if (!_.isEmpty(balances.chains)) {
+        res.status(200).json(balances);
+      } else {
+        res.status(200).json({});
+      }
     } else {
-      res.status(200).json({});
+      const balances = dbClient.queryAllChain(walletAddress, table);
+      if (!_.isEmpty(balances.chains)) {
+        res.status(200).json(balances);
+      } else {
+        res.status(200).json({});
+      }
     }
   } catch (e) {
     console.log(`error fetching for address: ${walletAddress}: ${e.message}`);

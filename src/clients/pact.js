@@ -36,10 +36,11 @@ class PactDBClient {
   }
 
   queryAllChain(address, table) {
+    console.log(`fetching balances for ${table} for address: ${address}`);
     const balanceResponses = this.dbs.map((db) =>
       this.queryToken(db, address, table)
     );
-
+    console.log(`done fetching balances for ${table} for address: ${address}`);
     const balances = {};
     let total = 0;
     balanceResponses.forEach((balance, i) => {

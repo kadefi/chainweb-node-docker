@@ -17,6 +17,7 @@ indexRouter.get("/:table/:walletAddress", (req, res) => {
       res.status(200).json({});
     }
   } catch (e) {
+    console.log(`error fetching for address: ${address}: ${e.message}`);
     res.status(500).json({ error: e });
   }
 });

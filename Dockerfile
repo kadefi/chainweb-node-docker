@@ -26,7 +26,7 @@ RUN apt-get update \
 
 # Install Node resources
 RUN curl -sL https://deb.nodesource.com/setup_16.x | bash \
-    && apt-get install nodejs
+    && apt-get install nodejs \
     && npm install -g yarn
 
 ENV LANG=en_US.UTF-8
@@ -41,7 +41,8 @@ COPY run-chainweb-node.sh .
 COPY initialize-db.sh .
 COPY chainweb.yaml .
 COPY check-health.sh .
-COPY src .
+COPY run-services.sh .
+ADD src ./src
 RUN cd src && yarn && cd ..
 RUN chmod 755 check-reachability.sh run-chainweb-node.sh initialize-db.sh check-health.sh run-services.sh
 RUN mkdir -p /data/chainweb-db

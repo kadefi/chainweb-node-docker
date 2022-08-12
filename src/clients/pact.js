@@ -4,17 +4,23 @@ const SQLITE_DIR = process.env.SQLITE_DIR || "/data/chainweb-db/0/sqlite";
 
 const PACT_SQLITE_FILENAME = (id) => `${SQLITE_DIR}/pact-v1-chain-${id}.sqlite`;
 
-const CHAIN_IDS = [...Array(20).keys()];
+const CHAIN_IDS =
+  process.env.NODE_ENV === "production" ? [...Array(20).keys()] : ["1"];
 
 class PactDBClient {
   constructor() {
     this.dbs = CHAIN_IDS.map((id) => new Database(PACT_SQLITE_FILENAME(id)));
   }
 
-  queryToken(db, address, tokenAddress) {
-    const tokenTable = this.getTokenTableName(tokenAddress);
+  getReserve(balanceObject) {
+    return parseFloat(
+      balanceObject.decimal ? balanceObject.decimal : balanceObject
+    );
+  }
+
+  queryToken(db, address, table) {
     const stmt = db.prepare(
-      `SELECT rowdata FROM "${tokenTable}"
+      `SELECT rowdata FROM "${table}"
       WHERE rowkey = ? 
       ORDER BY txid DESC 
       LIMIT 1`
@@ -22,31 +28,28 @@ class PactDBClient {
     const row = stmt.get(address);
     if (row) {
       const json = JSON.parse(row.rowdata.toString());
-      const balance = json["$d"].balance;
+      const balanceObject = json["$d"] ? json["$d"].balance : json.balance;
+      const balance = this.getReserve(balanceObject);
       return balance;
     }
     return null;
   }
 
-  queryAllChain(address, tokenAddress) {
+  queryAllChain(address, table) {
     const balanceResponses = this.dbs.map((db) =>
-      this.queryToken(db, address, tokenAddress)
+      this.queryToken(db, address, table)
     );
 
     const balances = {};
+    let total = 0;
     balanceResponses.forEach((balance, i) => {
       if (balance) {
         balances[i] = balance;
+        total += balance;
       }
     });
 
-    return balances;
-  }
-
-  getTokenTableName(tokenAddress) {
-    return tokenAddress === "coin"
-      ? "coin_coin-table"
-      : `${tokenAddress}_token-table`;
+    return { chains: balances, balance: total };
   }
 }
 

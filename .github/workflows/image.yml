@@ -24,4 +24,4 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           push: true
-          tags: kadefi/chainweb-node-docker:testing
+          tags: kadefi/pact-db-api:latest

@@ -9,7 +9,7 @@ export NODE_ENV="production"
 export CHAINWEB_NETWORK=${CHAINWEB_NETWORK:-mainnet01}
 export CHAINWEB_P2P_PORT=${CHAINWEB_P2P_PORT:-1789}
 
-while ! (curl -fsLk "https://api.chainweb.com/chainweb/0.0/$CHAINWEB_NETWORK/cut")
+while ! (curl -fsLk "https://localhost:$CHAINWEB_P2P_PORT/chainweb/0.0/$CHAINWEB_NETWORK/cut")
 do 
   echo "cut endpoint not up yet sleeping 30s"
   sleep 30s

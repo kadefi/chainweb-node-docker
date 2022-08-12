@@ -11,7 +11,9 @@ class PactDBClient {
   constructor() {
     this.dbs = CHAIN_IDS.map((id) => {
       console.log(`connecting to ${PACT_SQLITE_FILENAME(id)}`);
-      return new Database(PACT_SQLITE_FILENAME(id), { readonly: true });
+      return new Database(PACT_SQLITE_FILENAME(id), {
+        readonly: true,
+      });
     });
   }
 

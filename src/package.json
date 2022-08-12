@@ -8,6 +8,7 @@
     "watch": "nodemon"
   },
   "dependencies": {
+    "axios": "^0.27.2",
     "better-sqlite3": "^7.6.2",
     "cookie-parser": "~1.4.4",
     "dotenv": "^16.0.1",

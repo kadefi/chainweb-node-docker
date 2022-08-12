@@ -1,16 +1,17 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import http from "http";
-import cluster from "cluster";
 
-import indexRouter from "./routes/index.js";
+import balanceRouter from "./routes/balance.js";
+import indexRouter from "./routes/health.js";
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use("/balance", indexRouter);
+app.use("/", indexRouter);
+app.use("/balance", balanceRouter);
 
 const port = process.env.PORT || 3000;
 app.set("port", port);

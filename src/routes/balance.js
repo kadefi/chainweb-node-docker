@@ -2,12 +2,12 @@ import express from "express";
 import PactDBClient from "../clients/pact.js";
 import _ from "underscore";
 
-const indexRouter = express.Router();
+const balanceRouter = express.Router();
 
 const dbClient = new PactDBClient();
 
 /* GET balance per token for ALL chains. */
-indexRouter.get("/:table/:walletAddress", (req, res) => {
+balanceRouter.get("/:table/:walletAddress", (req, res) => {
   const { table, walletAddress } = req.params;
   try {
     if (table === "kaddex.skdx_token-table") {
@@ -31,4 +31,4 @@ indexRouter.get("/:table/:walletAddress", (req, res) => {
   }
 });
 
-export default indexRouter;
+export default balanceRouter;

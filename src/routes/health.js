@@ -28,7 +28,7 @@ const kadenaGetHeight = async () => {
         timeout: 5000,
       }
     );
-    console.log(`${ip}: HEIGHT: ${kadenaData.data.height}`);
+    console.log(`HEIGHT: ${kadenaData.data.height}`);
     return kadenaData.data.height;
   } catch (e) {
     console.log(e.message);

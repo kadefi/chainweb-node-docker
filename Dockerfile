@@ -24,6 +24,11 @@ RUN apt-get update \
     && locale-gen en_US.UTF-8 \
     && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8
 
+# Install Node resources
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash \
+    && apt-get install nodejs
+    && npm install -g yarn
+
 ENV LANG=en_US.UTF-8
 
 # Install chainweb applications
@@ -36,7 +41,9 @@ COPY run-chainweb-node.sh .
 COPY initialize-db.sh .
 COPY chainweb.yaml .
 COPY check-health.sh .
-RUN chmod 755 check-reachability.sh run-chainweb-node.sh initialize-db.sh check-health.sh
+COPY src .
+RUN cd src && yarn && cd ..
+RUN chmod 755 check-reachability.sh run-chainweb-node.sh initialize-db.sh check-health.sh run-services.sh
 RUN mkdir -p /data/chainweb-db
 RUN mkdir -p /root/.local/share/chainweb-node/mainnet01/
 
@@ -45,6 +52,7 @@ EXPOSE 443
 EXPOSE 80
 EXPOSE 1789
 EXPOSE 1848
+EXPOSE 3000
 HEALTHCHECK --start-period=10m --interval=1m --retries=5 --timeout=10s CMD ./check-health.sh
 
-CMD ./run-chainweb-node.sh
+CMD ./run-services.sh

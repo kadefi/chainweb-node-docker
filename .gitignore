@@ -1,0 +1,4 @@
+src/node_modules
+src/yarn-error.log
+src/.env
+test.txt

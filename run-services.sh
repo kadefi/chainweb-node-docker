@@ -15,6 +15,7 @@ do
   sleep 30s
 done
 
+export CHAINWEB_SERVICE_PORT=${CHAINWEB_SERVICE_PORT:-1848}
 echo "starting pact db api"
 cd src && yarn start &
 

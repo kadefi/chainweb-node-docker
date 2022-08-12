@@ -58,7 +58,7 @@ class PactDBClient {
 
   querySingleChain(chain, address, table) {
     console.log(`fetching balances for ${table} for address: ${address}`);
-    const balance = this.queryChainToken(chain, address, token);
+    const balance = this.queryChainToken(chain, address, table);
     console.log(`done fetching balances for ${table} for address: ${address}`);
     const balances = {};
     if (balance) {

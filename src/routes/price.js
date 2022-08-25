@@ -29,7 +29,7 @@ priceRouter.get("/kaddex/:tokenAddress", (req, res) => {
   const { tokenAddress } = req.params;
   const formatted = `coin:${tokenAddress}`;
   try {
-    const price = dbClient.queryChain(
+    const price = dbClient.queryPriceForToken(
       2,
       getPriceForTokenQuery("kaddex.exchange_pairs"),
       formatted
@@ -66,7 +66,7 @@ priceRouter.get("/kdswap/:tokenAddress", (req, res) => {
   const { tokenAddress } = req.params;
   const formatted = `coin:${tokenAddress}`;
   try {
-    const price = dbClient.queryChain(
+    const price = dbClient.queryPriceForToken(
       1,
       getPriceForTokenQuery("kdlaunch.kdswap-exchange_pairs"),
       formatted

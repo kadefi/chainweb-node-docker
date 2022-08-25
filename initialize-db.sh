@@ -46,7 +46,7 @@ if [ -d $DBDIR ]; then
 else
   echo "$DBDIR does not exists, lets download the bootstrap"
   # Getting Kadena bootstrap from Zel Servers
-  BOOTSTRAPLOCATIONS[0]="http://89.58.3.209:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=675c85498d3d97bf5a0d36608ac55be5d63903b3cd0d6e8a38d319e844987d60"
+  BOOTSTRAPLOCATIONS[0]="http://65.108.196.144:16177/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=a6684a8839263c8ea2876a890536e18b4096ecdd50e599f95ec363e59d7608aa"
   BOOTSTRAPLOCATIONS[1]="http://202.61.228.139:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=44415ab654fdaa89ce133bb1f03c6de075b6302c4a6fe6c3019efff9e10ea5f1"
   BOOTSTRAPLOCATIONS[2]="http://45.129.181.236:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=b42f0511bc6f3407cbb9cbc370f0a3a4f2b3940bcdf91421d308d6702c10d336"
   BOOTSTRAPLOCATIONS[3]="http://89.58.42.150:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=5ca646c197ad4cac9148455a6305ffeb846e821f3c5989f4551f69832663f3bc"

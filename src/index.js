@@ -4,6 +4,7 @@ import http from "http";
 
 import balanceRouter from "./routes/balance.js";
 import indexRouter from "./routes/health.js";
+import priceRouter from "./routes/price.js";
 const app = express();
 
 app.use(express.json());
@@ -12,6 +13,7 @@ app.use(cookieParser());
 
 app.use("/", indexRouter);
 app.use("/balance", balanceRouter);
+app.use("/price", priceRouter);
 
 const port = process.env.PORT || 3000;
 app.set("port", port);

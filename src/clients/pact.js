@@ -67,27 +67,32 @@ class PactDBClient {
   }
 
   queryToken(db, address, table) {
-    const stmt = db.prepare(
-      `SELECT rowdata FROM "${table}"
-      WHERE rowkey = ? 
-      ORDER BY txid DESC 
-      LIMIT 1`
-    );
-    const row = stmt.get(address);
-    if (row) {
-      const json = JSON.parse(row.rowdata.toString());
-      const balanceObject = json["$d"] ? json["$d"].balance : json.balance;
-      const balance = this.getReserve(balanceObject);
-      return balance;
+    try {
+      const stmt = db.prepare(
+        `SELECT rowdata FROM "${table}"
+        WHERE rowkey = ? 
+        ORDER BY txid DESC 
+        LIMIT 1`
+      );
+      const row = stmt.get(address);
+      if (row) {
+        const json = JSON.parse(row.rowdata.toString());
+        const balanceObject = json["$d"] ? json["$d"].balance : json.balance;
+        const balance = this.getReserve(balanceObject);
+        return balance;
+      }
+      return null;
+    } catch (e) {
+      console.log(e.message);
+      return null;
     }
-    return null;
   }
 
   queryAllChain(address, table) {
     console.log(`fetching balances for ${table} for address: ${address}`);
-    const balanceResponses = this.dbs.map((db) =>
-      this.queryToken(db, address, table)
-    );
+    const balanceResponses = this.dbs.map((db, i) => {
+      return this.queryToken(db, address, table);
+    });
     console.log(`done fetching balances for ${table} for address: ${address}`);
     const balances = {};
     let total = 0;

@@ -105,6 +105,20 @@ class PactDBClient {
 
     return { chains: balances, balance: total };
   }
+
+  queryChain(chain, query) {
+    try {
+      const stmt = this.dbs[chain].prepare(query);
+      const rows = stmt.all();
+      if (rows) {
+        return rows
+      }
+      return null;
+    } catch (e) {
+      console.log(e.message);
+      return null;
+    }
+  }
 }
 
 export default PactDBClient;

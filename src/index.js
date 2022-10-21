@@ -5,6 +5,7 @@ import http from "http";
 import balanceRouter from "./routes/balance.js";
 import indexRouter from "./routes/health.js";
 import priceRouter from "./routes/price.js";
+import galleryRouter from "./routes/gallery.js";
 const app = express();
 
 app.use(express.json());
@@ -14,6 +15,7 @@ app.use(cookieParser());
 app.use("/", indexRouter);
 app.use("/balance", balanceRouter);
 app.use("/price", priceRouter);
+app.use("/gallery", galleryRouter);
 
 const port = process.env.PORT || 3000;
 app.set("port", port);

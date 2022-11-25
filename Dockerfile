@@ -9,7 +9,7 @@ ARG UBUNTUVER=20.04
 
 FROM ubuntu:${UBUNTUVER}
 
-ARG REVISION=b4e1147
+ARG REVISION=323bce4
 ARG GHCVER=8.10.7
 ARG UBUNTUVER
 
@@ -19,7 +19,7 @@ LABEL ubuntu="$UBUNTUVER"
 
 # install prerequisites
 RUN apt-get update \
-    && apt-get install -y librocksdb-dev curl xxd openssl binutils locales jq \
+    && apt-get install -y llibtbb2 libgflags2.2 libsnappy1v5 curl xxd openssl binutils locales jq \
     && rm -rf /var/lib/apt/lists/* \
     && locale-gen en_US.UTF-8 \
     && update-locale LC_ALL=en_US.UTF-8 LANG=en_US.UTF-8

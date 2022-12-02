@@ -46,7 +46,7 @@ chainweb:
   reintroTxs: true
   cuts:
     pruneChainDatabase: true
-    fetchTimeout: 3000000
+    fetchTimeout: 50000000
     initialCutHeightLimit: null
   rosetta: true
 logging:

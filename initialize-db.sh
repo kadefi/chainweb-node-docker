@@ -62,7 +62,7 @@ else
   BOOTSTRAPLOCATIONS[13]="http://195.201.57.122:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=5b2cac3d7888085ea55e30287c9f3ceb85905542bb7bfc1aaac92470479c176b"
   BOOTSTRAPLOCATIONS[14]="http://157.90.177.126:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=37a6312de5857959bdffa913dbd1d7f456515333747b0669c37f476b6e01b0c4"
   BOOTSTRAPLOCATIONS[15]="http://135.181.20.225:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=ce6c87d4b396215738c386f9718bf51fc56480802fcb69d4fd17ca162d792832"
-  BOOTSTRAPLOCATIONS[16]="http://135.181.79.234:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=2b00cbb24154ecca46b2900d0d6f6c43ed3ed3ad75cbfc6ba0c9bce79a6e66ab"
+  BOOTSTRAPLOCATIONS[16]="http://95.217.73.230:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=60593286c38ae7b1b98c1bd3472d5b54d9441a67c88728adc5fe513e317335f8"
   BOOTSTRAPLOCATIONS[17]="http://95.217.121.248:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=76458423547e15c08a9b55aeb0ecd7e840c514af7d74cdbe311828db7af43f65"
   BOOTSTRAPLOCATIONS[18]="http://135.181.57.52:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=15d134572455ce52c4dcf9b912a68b40fe5cecbb9bcdf453ff565600f6de848b"
   BOOTSTRAPLOCATIONS[19]="http://65.108.9.188:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=35b2419d88ce8f7640b03d265d33a1eb525ff31b64324c5a45f4505c7df35277"
@@ -80,7 +80,7 @@ else
   retry=0
   file_lenght=0
   while [[ "$file_lenght" -lt "10000000000" && "$retry" -lt 6 ]]; do
-    index=$(shuf -i 0-39 -n 1)
+    index=$(shuf -i 0-29 -n 1)
     echo "Testing bootstrap location ${BOOTSTRAPLOCATIONS[$index]}"
     file_lenght=$(curl -sI -m 5 ${BOOTSTRAPLOCATIONS[$index]} | egrep 'Content-Length|content-length' | sed 's/[^0-9]*//g')
 

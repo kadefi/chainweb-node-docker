@@ -45,8 +45,8 @@ if [ -d $DBDIR ]; then
   echo "Directory $DBDIR already exists, we will not download any bootstrap, if you want to download the bootstrap you need to delete chainweb-db folder first"
 else
   echo "$DBDIR does not exists, lets download the bootstrap"
-  # Getting Kadena bootstrap from Zel Servers
-  BOOTSTRAPLOCATIONS[0]="http://65.108.196.144:16177/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=a6684a8839263c8ea2876a890536e18b4096ecdd50e599f95ec363e59d7608aa"
+  # Getting Kadena bootstrap from Flux Servers
+  BOOTSTRAPLOCATIONS[0]="http://89.58.3.209:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=675c85498d3d97bf5a0d36608ac55be5d63903b3cd0d6e8a38d319e844987d60"
   BOOTSTRAPLOCATIONS[1]="http://202.61.228.139:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=44415ab654fdaa89ce133bb1f03c6de075b6302c4a6fe6c3019efff9e10ea5f1"
   BOOTSTRAPLOCATIONS[2]="http://45.129.181.236:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=b42f0511bc6f3407cbb9cbc370f0a3a4f2b3940bcdf91421d308d6702c10d336"
   BOOTSTRAPLOCATIONS[3]="http://89.58.42.150:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=5ca646c197ad4cac9148455a6305ffeb846e821f3c5989f4551f69832663f3bc"
@@ -62,35 +62,25 @@ else
   BOOTSTRAPLOCATIONS[13]="http://195.201.57.122:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=5b2cac3d7888085ea55e30287c9f3ceb85905542bb7bfc1aaac92470479c176b"
   BOOTSTRAPLOCATIONS[14]="http://157.90.177.126:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=37a6312de5857959bdffa913dbd1d7f456515333747b0669c37f476b6e01b0c4"
   BOOTSTRAPLOCATIONS[15]="http://135.181.20.225:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=ce6c87d4b396215738c386f9718bf51fc56480802fcb69d4fd17ca162d792832"
-  BOOTSTRAPLOCATIONS[16]="http://135.181.79.234:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=2b00cbb24154ecca46b2900d0d6f6c43ed3ed3ad75cbfc6ba0c9bce79a6e66ab"
+  BOOTSTRAPLOCATIONS[16]="http://95.217.73.230:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=60593286c38ae7b1b98c1bd3472d5b54d9441a67c88728adc5fe513e317335f8"
   BOOTSTRAPLOCATIONS[17]="http://95.217.121.248:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=76458423547e15c08a9b55aeb0ecd7e840c514af7d74cdbe311828db7af43f65"
   BOOTSTRAPLOCATIONS[18]="http://135.181.57.52:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=15d134572455ce52c4dcf9b912a68b40fe5cecbb9bcdf453ff565600f6de848b"
   BOOTSTRAPLOCATIONS[19]="http://65.108.9.188:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=35b2419d88ce8f7640b03d265d33a1eb525ff31b64324c5a45f4505c7df35277"
   BOOTSTRAPLOCATIONS[20]="http://46.38.251.26:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=02e709cbd26bb9328dd3d9dc1fa44db8cea2da127ed8e7ed76473eee4f4a484e"
   BOOTSTRAPLOCATIONS[21]="http://5.45.111.210:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=259106bf5dbbff5f017019bf38a9b6127a323238f6da0f327fe855b26a1e3940"
-  BOOTSTRAPLOCATIONS[22]="http://46.38.236.130:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=acc08adedbdcc04d7515d0f6deb803da9f1320eec17f5109942b399b0eea1aab"
-  BOOTSTRAPLOCATIONS[23]="http://37.120.175.86:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=68ab87b2d31fe71760981de56b9d3e4b156aa93de1e3d3f87e085508ba57bd98"
-  BOOTSTRAPLOCATIONS[24]="http://185.16.61.122:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=fc0de5b33759a9b5499e2a45b3f8a262102c078100e506445e72f90406268ba2"
-  BOOTSTRAPLOCATIONS[25]="http://89.58.42.201:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=54ee1f03e69f290cca03944be2f1ff84361fd97b71b37159dce543ae9667f22a"
-  BOOTSTRAPLOCATIONS[26]="http://37.221.197.179:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=f455d3594e62ae3ae2527f51e4160e60695b175532186b50dd9cbd3f86232a89"
-  BOOTSTRAPLOCATIONS[27]="http://89.58.37.73:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=6cce25a5555322f4b51c18f8a3a6556f27a0c0f5abd1ba25c2d9aed2a07482ec"
-  BOOTSTRAPLOCATIONS[28]="http://45.129.182.59:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=70b7d6b180ef278427eef82c125007d46e55367238887af3e55476c25041c4a7"
-  BOOTSTRAPLOCATIONS[29]="http://94.16.104.218:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=8a515213f43959357085ee185d334c40a883f1f139e5cd51526ebd6f605a719f"
-  BOOTSTRAPLOCATIONS[30]="http://65.108.226.146:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=7f726610528e52c964344130c799a3a81b428c779a4a3d88d5e1ea1026213812"
-  BOOTSTRAPLOCATIONS[31]="http://65.108.33.215:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=193df95005b56540ce3a4ac37cbc6173885cbcd7b63419596d263715ff0d6c8b"
-  BOOTSTRAPLOCATIONS[32]="http://5.9.77.39:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=47e1163d7d985788ad55147560a80add6675a945a4340e45098a7052185bdb65"
-  BOOTSTRAPLOCATIONS[33]="http://176.9.183.28:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=3646aa306c9afc9fbde9fef7963cf916530b20112458110b9a1abb227ed7b1eb"
-  BOOTSTRAPLOCATIONS[34]="http://65.108.230.174:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=4fad996b740c5c659ef9e21d9f2209d63769396700be14174d861d931a59ce88"
-  BOOTSTRAPLOCATIONS[35]="http://65.108.230.178:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=64501876cdd7f249df8376428bd1fbfa15c3499110a58b45945c464448e071ce"
-  BOOTSTRAPLOCATIONS[36]="http://65.108.230.178:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=64501876cdd7f249df8376428bd1fbfa15c3499110a58b45945c464448e071ce"
-  BOOTSTRAPLOCATIONS[37]="http://65.108.230.184:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=7b949f458abe0fb35d64a8ce566c30f0a23d0812f09e17b0bc3bc68450d9be56"
-  BOOTSTRAPLOCATIONS[38]="http://65.108.226.203:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=bdf5e43ac6f0cce414cc9e708c70db172cf71688e9fee82d61e2d5c991818f5c"
-  BOOTSTRAPLOCATIONS[39]="http://65.108.226.234:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=3e905c2a9683a35b56f614ff4d7390572793ffc887ed6a0846c86bda6217b9bd"
-
+  BOOTSTRAPLOCATIONS[22]="http://185.16.61.122:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=fc0de5b33759a9b5499e2a45b3f8a262102c078100e506445e72f90406268ba2"
+  BOOTSTRAPLOCATIONS[23]="http://89.58.42.201:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=54ee1f03e69f290cca03944be2f1ff84361fd97b71b37159dce543ae9667f22a"
+  BOOTSTRAPLOCATIONS[24]="http://89.58.37.73:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=6cce25a5555322f4b51c18f8a3a6556f27a0c0f5abd1ba25c2d9aed2a07482ec"
+  BOOTSTRAPLOCATIONS[25]="http://45.129.182.59:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=70b7d6b180ef278427eef82c125007d46e55367238887af3e55476c25041c4a7"
+  BOOTSTRAPLOCATIONS[26]="http://94.16.104.218:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=8a515213f43959357085ee185d334c40a883f1f139e5cd51526ebd6f605a719f"
+  BOOTSTRAPLOCATIONS[27]="http://37.221.197.179:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=f455d3594e62ae3ae2527f51e4160e60695b175532186b50dd9cbd3f86232a89"
+  BOOTSTRAPLOCATIONS[28]="http://37.120.175.86:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=68ab87b2d31fe71760981de56b9d3e4b156aa93de1e3d3f87e085508ba57bd98"
+  BOOTSTRAPLOCATIONS[29]="http://46.38.236.130:16127/apps/fluxshare/getfile/kda_bootstrap.tar.gz?token=0e271f66da3dfa7d8c33e33bbfa5c06259608a3dbceb641791da3dd17983886b"
+  
   retry=0
   file_lenght=0
   while [[ "$file_lenght" -lt "10000000000" && "$retry" -lt 6 ]]; do
-    index=$(shuf -i 0-39 -n 1)
+    index=$(shuf -i 0-29 -n 1)
     echo "Testing bootstrap location ${BOOTSTRAPLOCATIONS[$index]}"
     file_lenght=$(curl -sI -m 5 ${BOOTSTRAPLOCATIONS[$index]} | egrep 'Content-Length|content-length' | sed 's/[^0-9]*//g')
 
